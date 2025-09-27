@@ -1,0 +1,11 @@
+export async function onRequestPost(context) {
+  const { request, env } = context;
+  const body = await request.json();
+
+  await env.STUDENTS_DB
+    .prepare("INSERT INTO students (admission_no, amount) VALUES (?, ?)")
+    .bind(body.admission, body.amount)
+    .run();
+
+  return Response.json({ message: "Donation added successfully!" });
+}
