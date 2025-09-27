@@ -1,0 +1,12 @@
+export async function onRequestGet(context) {
+  const { request, env } = context;
+  const url = new URL(request.url);
+  const admission = url.searchParams.get("admission");
+
+  let result = await env.STUDENTS_DB
+    .prepare("SELECT * FROM students WHERE admission_no = ?")
+    .bind(admission)
+    .all();
+
+  return Response.json({ results: result.results });
+}
